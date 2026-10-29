@@ -20,9 +20,11 @@ The validator was designed for the needs of medical education question banks, bu
 
 ## Browser preview (no Python installation)
 
+**[Try the browser demo](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/)** — Cloudflare Worker deployment is active. The sample questions run locally in your browser; no files are uploaded to the server. If your network blocks workers.dev, [download the repository](https://github.com/hossamkadasi/surgcore-mcq-validator/archive/refs/heads/main.zip) and open `demo/index.html` offline instead.
+
 A local-only, dependency-free **browser demo** is included in [demo/index.html](demo/index.html). Download the repository ZIP, extract it and open that HTML file in a modern browser. Try the built-in synthetic samples, check CSV/JSON files with optional column mapping, and download a JSON report without uploading questions to a server. [Preview instructions and limitations](docs/BROWSER_DEMO.md).
 
-The preview does not run the Python CLI's heuristic near-duplicate scan and does not verify medical answers. Public web hosting is a separate step: this repository link alone is not a live public demo.
+The preview does not run the Python CLI's heuristic near-duplicate scan and does not verify medical answers. The separate Cloudflare Worker is deployed at the link above. It is not part of SurgCore Pro production.
 
 ## Quick start
 

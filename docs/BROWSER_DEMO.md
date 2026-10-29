@@ -27,9 +27,11 @@ With Node.js 20+:
 node --test demo/tests/browser-validator.test.cjs
 ```
 
-## Public demo hosting
+## Hosted demo
 
-These are static files that can be hosted on GitHub Pages, Cloudflare Pages, or any static host. **The existence of a repository does not mean a public demo URL has been activated.** An owner must configure hosting; a hosted page can reveal a visitor's IP to the static host when loading HTML, JS and CSS, but selected question files are not uploaded.
+**[Open the public demo](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/)**. It is deployed to a dedicated Cloudflare Worker called `surgcore-mcq-validator-demo`, separate from the production SurgCore Pro application. Cloudflare API independently reports a successful script upload, an active 100% deployment, and an enabled `workers.dev` subdomain. Our environment could not perform an independent external HTTP load of the URL; testers should report any accessibility issues.
+
+The static host may receive the visitor's IP when requesting the page and assets. The demo never uploads selected question files, sends analytics, or calls external APIs. If `workers.dev` cannot be reached, download the repository ZIP and open `demo/index.html` locally.
 
 ## Reporting and privacy
 
