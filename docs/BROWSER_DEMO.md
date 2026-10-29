@@ -29,9 +29,17 @@ node --test demo/tests/browser-validator.test.cjs
 
 ## Hosted demo
 
-**[Open the public demo](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/)**. It is deployed to a dedicated Cloudflare Worker called `surgcore-mcq-validator-demo`, separate from the production SurgCore Pro application. Cloudflare API independently reports a successful script upload, an active 100% deployment, and an enabled `workers.dev` subdomain. Our environment could not perform an independent external HTTP load of the URL; testers should report any accessibility issues.
+**[Open the live browser demo](https://surgcore-mcq-demo.pages.dev/)**. A dedicated Cloudflare Pages project `surgcore-mcq-demo` is connected to this repository, with `main` as its production branch and `demo` as its static output directory. Cloudflare reported deployment success (deployment ID `f0d1c5c9-b5c0-4a6b-9678-be4c256ddbfd`) on 2026-10-29 UTC.
 
-The static host may receive the visitor's IP when requesting the page and assets. The demo never uploads selected question files, sends analytics, or calls external APIs. If `workers.dev` cannot be reached, download the repository ZIP and open `demo/index.html` locally.
+An independent browser load returned HTTP 200, and interactive testing confirmed:
+
+- Valid synthetic sample: 2 checked, 2 structurally valid, 0 errors, 0 warnings.
+- Intentionally flagged sample: 3 checked, 2 structurally valid, 2 errors and 1 warning.
+- Both `duplicate_stem` and `invalid_answer` appeared in the flagged sample.
+
+These are **maintainer-run verification tests**, not user adoption metrics. If the Pages URL is inaccessible on your network, an [alternative Cloudflare Worker host](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) or local ZIP download can be used. The Workers mirror was not part of the independent browser verification described above.
+
+Cloudflare sees HTTP requests for static HTML/JS/CSS and may log client IP addresses; **selected question files are handled entirely in browser memory**, with no remote upload endpoints.
 
 ## Reporting and privacy
 

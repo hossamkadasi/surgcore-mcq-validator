@@ -26,6 +26,14 @@
 - Node.js CI [run #40957177430](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40957177430) passed 20 synthetic tests; Python 3.10 and 3.13 jobs also succeeded.
 - This is **distribution readiness**, not evidence of independent users. Obtain genuine tester feedback at [Issue #1](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1).
 
+## Verified public browser demo (2026-10-29)
+
+- Dedicated project: [surgcore-mcq-demo.pages.dev](https://surgcore-mcq-demo.pages.dev/) running a GitHub-linked Cloudflare Pages deployment of `demo/`.
+- Cloudflare deployment ID `f0d1c5c9-b5c0-4a6b-9678-be4c256ddbfd` reports **success**.
+- External live page retrieval returned HTTP **200** and the expected title and interface.
+- Interactive synthetic sample QA in an independent browser: **valid sample 2/2, zero errors/warnings**; intentionally flagged sample **3 records, 2 errors, 1 warning** with `duplicate_stem` and `invalid_answer`.
+- These interactions were performed during maintenance QA. They **do not represent independent external adoption**.
+
 ## Adoption status at initial publication (2026-10-29)
 
 - Public GitHub repository was newly created on 2026-10-29.
