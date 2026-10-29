@@ -85,6 +85,42 @@ class ValidatorTests(unittest.TestCase):
         second = question(2, stem="which field stores the correct ANSWER label for this MCQ!!!")
         self.assertIn("duplicate_stem", self.codes(first, second))
 
+    def test_clinical_inequalities_in_stems_are_not_exact_duplicates(self):
+        first = question(1, stem="When arterial pH < 7.30, what is the next step?")
+        second = question(2, stem="When arterial pH > 7.30, what is the next step?")
+        codes = self.codes(first, second)
+        self.assertNotIn("duplicate_stem", codes)
+        self.assertNotIn("near_duplicate_stem", codes)
+
+    def test_comparator_variants_are_not_collapsed(self):
+        stems = ["For pH <= 7.30, which answer is preferred?",
+                 "For pH >= 7.30, which answer is preferred?",
+                 "For pH = 7.30, which answer is preferred?"]
+        bank = [question(i + 1, stem=stem) for i, stem in enumerate(stems)]
+        self.assertNotIn("duplicate_stem", self.codes(*bank))
+        self.assertNotIn("near_duplicate_stem", self.codes(*bank))
+
+    def test_decimal_numbers_not_collapsed(self):
+        a = question(1, stem="The threshold is 7.30 in the synthetic example?")
+        b = question(2, stem="The threshold is 7.03 in the synthetic example?")
+        self.assertNotIn("duplicate_stem", self.codes(a,b))
+        self.assertNotIn("near_duplicate_stem", self.codes(a,b))
+
+    def test_percentages_and_doses_preserved(self):
+        a = question(1, stem="The model rate is 1% each year in this synthetic example?")
+        b = question(2, stem="The model rate is 10% each year in this synthetic example?")
+        self.assertNotIn("duplicate_stem", self.codes(a,b))
+        self.assertNotIn("near_duplicate_stem", self.codes(a,b))
+
+    def test_arabic_comparison_symbols_preserved(self):
+        a = question(1, stem="عندما تكون القيمة < 7.30 ما الإجابة؟")
+        b = question(2, stem="عندما تكون القيمة > 7.30 ما الإجابة؟")
+        self.assertNotIn("duplicate_stem", self.codes(a,b))
+        self.assertNotIn("near_duplicate_stem", self.codes(a,b))
+
+    def test_short_stems_only_difference_is_clinical_symbol(self):
+        self.assertNotEqual(normalize_text("pH<7.3"), normalize_text("pH>7.3"))
+
     def test_near_duplicates(self):
         first = question(1)
         second = question(2, stem="Which field stores the correct answer label for this MCQ record?")
@@ -175,6 +211,7 @@ class LoaderTests(unittest.TestCase):
             path.write_text("hello", encoding="utf-8")
             with self.assertRaises(InputError):
                 load_questions(path)
+
 
 
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 — 2026-10-29
+
+- Prevent clinical inequalities, numeric thresholds, dose and percent symbols from being erased during question-stem duplicate detection.
+- Suppress heuristic near-duplicate flags where the ordered clinical numeric/operator tokens differ.
+- Prevent `--output` from overwriting the input file or mapping file, even when `--overwrite` is requested.
+- Require an explicit `--overwrite` flag to replace an existing report; write reports atomically.
+- Add focused regression tests for both safety issues.
+
+
 ## 0.2.0 — 2026-10-29
 
 - Added optional column mapping for CSV and JSON input (`--mapping`) and an example mapping file.
