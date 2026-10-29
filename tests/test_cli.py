@@ -79,6 +79,67 @@ class CliTests(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertIn("Mapping file not found", err)
 
+    def test_report_cannot_overwrite_input_even_with_force(self):
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / "bank.json"
+            original = json.dumps(GOOD)
+            file.write_text(original, encoding="utf-8")
+            for force in ([], ["--overwrite"]):
+                code, _, err = self.run_cli(["validate", str(file), "--output", str(file), *force])
+                self.assertEqual(code, 2)
+                self.assertIn("Refusing", err)
+                self.assertEqual(file.read_text(encoding="utf-8"), original)
+
+    def test_report_cannot_overwrite_mapping(self):
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / "bank.json"
+            file.write_text(json.dumps(GOOD), encoding="utf-8")
+            mapping = Path(folder) / "mapping.json"
+            original = '{"id": "id"}'
+            mapping.write_text(original, encoding="utf-8")
+            code, _, err = self.run_cli(["validate", str(file), "--mapping", str(mapping),
+                                         "--output", str(mapping), "--overwrite"])
+            self.assertEqual(code, 2)
+            self.assertIn("Refusing", err)
+            self.assertEqual(mapping.read_text(encoding="utf-8"), original)
+
+    def test_report_overwrite_requires_explicit_flag(self):
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / "bank.json"
+            file.write_text(json.dumps(GOOD), encoding="utf-8")
+            report = Path(folder) / "report.json"
+            report.write_text("Existing report must be preserved", encoding="utf-8")
+            code, _, err = self.run_cli(["validate", str(file), "--format", "json", "--output", str(report)])
+            self.assertEqual(code, 2)
+            self.assertIn("--overwrite", err)
+            self.assertEqual(report.read_text(encoding="utf-8"), "Existing report must be preserved")
+            code, _, _ = self.run_cli(["validate", str(file), "--format", "json", "--output", str(report), "--overwrite"])
+            self.assertEqual(code, 0)
+            self.assertEqual(json.loads(report.read_text(encoding="utf-8"))["summary"]["record_count"], 1)
+
+    def test_output_source_symlink_is_protected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source = Path(folder) / "bank.json"
+            source.write_text(json.dumps(GOOD), encoding="utf-8")
+            link = Path(folder) / "fake-report.json"
+            try:
+                link.symlink_to(source)
+            except (OSError, NotImplementedError):
+                self.skipTest("Symlinks unavailable")
+            before = source.read_text(encoding="utf-8")
+            code, _, _ = self.run_cli(["validate", str(source), "--output", str(link), "--overwrite"])
+            self.assertEqual(code, 2)
+            self.assertEqual(source.read_text(encoding="utf-8"), before)
+
+    def test_report_write_cleans_up_temp_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / "bank.json"
+            file.write_text(json.dumps(GOOD), encoding="utf-8")
+            report = Path(folder) / "report.txt"
+            code, _, _ = self.run_cli(["validate", str(file), "--output", str(report)])
+            self.assertEqual(code, 0)
+            self.assertEqual(list(Path(folder).glob(".surgcore-report-*.tmp")), [])
+
     def test_missing_file(self):
         code, _, err = self.run_cli(["validate", "/missing/example.csv"])
         self.assertEqual(code, 2)

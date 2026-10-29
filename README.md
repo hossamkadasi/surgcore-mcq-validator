@@ -11,7 +11,7 @@ The validator was designed for the needs of medical education question banks, bu
 - Runs locally; **no uploads, accounts, analytics, API keys, or network requests**.
 - Works with JSON and CSV; Python 3.10+; no runtime dependencies.
 - Supports explicit field mapping for differently named CSV/JSON columns (v0.2.0).
-- Compares option strings without discarding clinically significant symbols such as `<`, `>`, `+`, `-`, and decimal points.
+- Compares question stems and option strings without discarding clinically significant symbols such as `<`, `>`, `+`, `-`, and decimal points.
 - Rejects ambiguous CSV headers or nested A-E/5-choice input instead of silently dropping answers.
 - Supports English and other Unicode text (including Arabic) for normalization.
 - Separates blocking `error`s from non-blocking `warning`s.
@@ -41,11 +41,13 @@ surgcore-mcq-validator validate examples/synthetic_questions.csv
 
 The JSON example intentionally includes one duplicated stem and an invalid `E` answer. The program should exit with code **1**, showing both issues. The CSV example contains valid synthetic rows and exits with **0**.
 
-To export a JSON report:
+To export a JSON report (the output file must not exist yet):
 
 ```bash
 PYTHONPATH=src python -m surgcore_mcq_validator validate examples/synthetic_questions.json --format json --output reports/qa.json
 ```
+
+Existing reports are never overwritten unless you add `--overwrite`. Even with that flag, the input file and optional mapping file can **never** be used as output targets. Reports are saved atomically to reduce partial writes.
 
 Warnings can block CI or import gates if desired:
 
@@ -109,7 +111,7 @@ Extra columns are ignored; `explanation` and `source` may be omitted but trigger
 | Warning | `missing_explanation`, `missing_source` | Missing educational rationale or provenance |
 | Warning | `near_duplicate_stem` | A *heuristic*, not semantic, near-match was found |
 
-Near-duplicate scanning uses overlapping three-word shingles to select candidates, then character-sequence similarity. It may **miss paraphrases** and may flag false positives, especially for templated questions. Always review flags manually.
+Near-duplicate scanning preserves ordered numeric/operator tokens; changes to clinical thresholds or comparison operators are not flagged as near duplicates. This can miss real duplicates with altered numbers, by design. It uses overlapping three-word shingles to select candidates, then character-sequence similarity. It may **miss paraphrases** and may flag false positives, especially for templated questions. Always review flags manually.
 
 JSON reports include issue location, stable code, severity, related record (when present), and summary counts. `schema_valid_record_count` counts rows with no **structural errors**; it is **not** a medically reviewed or publication-ready count.
 

@@ -17,17 +17,38 @@ OPTION_LETTERS = "ABCD"
 MAX_POSTING_LIST = 60  # Ignore overly common shingles when finding fuzzy candidates.
 
 
+# Preserve numbers, decimal separators, clinical comparison operators and units.
+# Ignore superficial prose punctuation such as question marks and exclamation points.
+STEM_TOKENS = re.compile(r"\w+(?:[.,]\d+)*|<=|>=|[≤≥≠±<>+\-−=/%°:]", flags=re.UNICODE)
+IMPORTANT_SYMBOLS = frozenset("<>=≤≥≠±+-−/%°:") | {"<=", ">="}
+
+
 def normalize_text(value: str) -> str:
-    """Normalize case, spaces and punctuation for *heuristic* deduplication."""
-    unicode_normalized = unicodedata.normalize("NFKC", value).casefold()
-    return " ".join(re.findall(r"\w+", unicode_normalized, flags=re.UNICODE))
+    """Case/spacing normalization preserving numerals and clinical operators.
+
+    This remains a *heuristic* comparison, not semantic or clinical validation.
+    """
+    text = unicodedata.normalize("NFKC", value).casefold()
+    return " ".join(STEM_TOKENS.findall(text))
+
+
+def _critical_signature(normalized_stem: str) -> tuple[str, ...]:
+    """Preserve ordered numbers and operators when screening fuzzy matches.
+
+    A changed threshold, ratio, inequality, or dose must not automatically be
+    flagged as a near duplicate solely because surrounding prose is identical.
+    """
+    return tuple(token for token in normalized_stem.split()
+                 if any(character.isdigit() for character in token)
+                 or token in IMPORTANT_SYMBOLS)
+
 
 
 def normalize_option(value: str) -> str:
     """Normalize choice text without losing clinically meaningful operators.
 
-    Unlike stem normalization, choice normalization must preserve symbols such
-    as `<`, `>`, `+`, `-`, and decimal points. Stripping these could wrongly
+    Choice normalization must preserve symbols such as `<`, `>`, `+`, `-`,
+    and decimal points. Stripping these could wrongly
     flag different pH, dose, or laboratory values as duplicate choices.
     """
     result = unicodedata.normalize("NFKC", value).casefold().strip()
@@ -125,6 +146,8 @@ def validate_questions(
                     best_score = near_duplicate_threshold
                     for previous_index in sorted(candidates):
                         previous_stem = prior_stems[previous_index]
+                        if _critical_signature(stem) != _critical_signature(previous_stem):
+                            continue
                         if abs(len(stem) - len(previous_stem)) > max(len(stem), len(previous_stem)) * (1 - near_duplicate_threshold):
                             continue
                         score = SequenceMatcher(None, stem, previous_stem, autojunk=False).ratio()
