@@ -78,6 +78,30 @@ The mapping JSON maps canonical names (`id`, `stem`, `option_a`, `option_b`, `op
 
 Use `--no-near-duplicates` to disable the optional fuzzy-stem check or `--similarity 0.95` to adjust its sensitivity (allowed range: 0.80-1.00).
 
+## Drop-in GitHub Action
+
+Other repositories can run the same structural checks on each pull request with a [reusable composite GitHub Action](action.yml), without writing validation scripts.
+
+```yaml
+name: MCQ QA
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  questions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: hossamkadasi/surgcore-mcq-validator@main
+        with:
+          file: path/to/your-authorized-bank.csv
+          fail-on: warning
+```
+
+For production, replace `@main` with a **reviewed full Git commit SHA** to prevent unexpected upstream changes. Use the [mapping input](docs/GITHUB_ACTIONS_INTEGRATION.md) for custom schemas. CI execution occurs on the runner chosen by the downstream repository; do not run private question data on public CI runners or expose identifiers in public logs.
+
 ## Supported schema
 
 ### JSON

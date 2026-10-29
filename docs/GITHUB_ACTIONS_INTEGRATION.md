@@ -1,5 +1,45 @@
 # GitHub Actions integration for other repositories
 
+## Simplest option: composite GitHub Action
+
+SurgCore MCQ Validator includes a reusable [root-level `action.yml`](../action.yml) that installs the package from the source of the action and runs it on files checked out by the calling repository.
+
+```yaml
+name: MCQ structure checks
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  mcq_quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: hossamkadasi/surgcore-mcq-validator@main
+        with:
+          file: data/authorized-questions.csv
+          fail-on: warning
+```
+
+This unpinned example demonstrates syntax. **Pin a reviewed full commit SHA instead of `@main` for production workloads.** The action also accepts `mapping`, `similarity` and `no-near-duplicates` inputs.
+
+Example custom mapping:
+
+```yaml
+      - uses: hossamkadasi/surgcore-mcq-validator@main
+        with:
+          file: data/authorized-questions.csv
+          mapping: data/column-mapping.json
+          fail-on: error
+          no-near-duplicates: 'true'
+```
+
+**Privacy:** The validator itself does not upload data, but the calling CI runner already has access to the checked-out repository's files. Never put licensed exam papers or patient records in a public repository, and remember GitHub Actions logs may expose question identifiers in diagnostics.
+
+## Alternative: install the pinned CLI directly
+
+
 Check an **authorized** CSV file in a separate project without uploading the source data to SurgCore or a third-party API:
 
 ```yaml
