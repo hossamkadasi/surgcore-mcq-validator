@@ -16,18 +16,18 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: hossamkadasi/surgcore-mcq-validator@main
+      - uses: hossamkadasi/surgcore-mcq-validator@dc5df8bd19a18c88dc19e78a98f8fc4cbe8f39c7
         with:
           file: data/authorized-questions.csv
           fail-on: warning
 ```
 
-This unpinned example demonstrates syntax. **Pin a reviewed full commit SHA instead of `@main` for production workloads.** The action also accepts `mapping`, `similarity` and `no-near-duplicates` inputs.
+Both examples pin the reviewed Action implementation to a full commit SHA. Update that pin deliberately when adopting newer releases. The SHA identifies the version containing the composite Action. The action also accepts `mapping`, `similarity` and `no-near-duplicates` inputs.
 
 Example custom mapping:
 
 ```yaml
-      - uses: hossamkadasi/surgcore-mcq-validator@main
+      - uses: hossamkadasi/surgcore-mcq-validator@dc5df8bd19a18c88dc19e78a98f8fc4cbe8f39c7
         with:
           file: data/authorized-questions.csv
           mapping: data/column-mapping.json
@@ -58,7 +58,7 @@ jobs:
         with:
           python-version: '3.13'
       - name: Install pinned open-source validator
-        run: python -m pip install 'git+https://github.com/hossamkadasi/surgcore-mcq-validator.git@b42e4d50e763d96f1b390ce1a96c2045496d5e6c'
+        run: python -m pip install 'git+https://github.com/hossamkadasi/surgcore-mcq-validator.git@dc5df8bd19a18c88dc19e78a98f8fc4cbe8f39c7'
       - name: Block structurally invalid questions
         run: surgcore-mcq-validator validate path/to/your/authorized-bank.csv --fail-on warning
 ```

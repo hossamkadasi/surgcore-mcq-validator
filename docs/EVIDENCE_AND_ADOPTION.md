@@ -34,6 +34,13 @@
 - Interactive synthetic sample QA in an independent browser: **valid sample 2/2, zero errors/warnings**; intentionally flagged sample **3 records, 2 errors, 1 warning** with `duplicate_stem` and `invalid_answer`.
 - These interactions were performed during maintenance QA. They **do not represent independent external adoption**.
 
+## Reusable GitHub Action verification (2026-10-29)
+
+- [PR #6](https://github.com/hossamkadasi/surgcore-mcq-validator/pull/6) added the composite `action.yml` and was merged after all checks passed.
+- [Main-branch CI run #40963511292](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40963511292): **success** on Python 3.10 and 3.13, JavaScript browser tests, and the reusable Action smoke job.
+- Action smoke job validated **two synthetic CSV fixtures**: standard headers (2 records, no errors/warnings) and custom mapping (1 record, no errors/warnings).
+- The reusable Action is published and can be consumed by other repositories through its pinned SHA. **No independent downstream adoption is claimed.**
+
 ## Adoption status at initial publication (2026-10-29)
 
 - Public GitHub repository was newly created on 2026-10-29.

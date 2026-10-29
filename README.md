@@ -94,13 +94,13 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: hossamkadasi/surgcore-mcq-validator@main
+      - uses: hossamkadasi/surgcore-mcq-validator@dc5df8bd19a18c88dc19e78a98f8fc4cbe8f39c7
         with:
           file: path/to/your-authorized-bank.csv
           fail-on: warning
 ```
 
-For production, replace `@main` with a **reviewed full Git commit SHA** to prevent unexpected upstream changes. Use the [mapping input](docs/GITHUB_ACTIONS_INTEGRATION.md) for custom schemas. CI execution occurs on the runner chosen by the downstream repository; do not run private question data on public CI runners or expose identifiers in public logs.
+This example is pinned to a **reviewed full Git commit SHA** for reproducible usage; update it only after reviewing a newer revision. Use the [mapping input](docs/GITHUB_ACTIONS_INTEGRATION.md) for custom schemas. CI execution occurs on the runner chosen by the downstream repository; do not run private question data on public CI runners or expose identifiers in public logs.
 
 ## Supported schema
 
