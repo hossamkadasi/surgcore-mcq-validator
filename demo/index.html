@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="description" content="Check the structure of MCQ banks in your browser. Free, local-only, open-source CSV and JSON checks. No uploads, no accounts.">
+  <title>SurgCore MCQ Validator | Private browser demo</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./validator.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="header"><div class="header-inner"><div class="brand">SurgCore / MCQ Validator</div><a href="https://github.com/hossamkadasi/surgcore-mcq-validator" target="_blank" rel="noopener noreferrer">View source on GitHub</a></div></header>
+  <main class="container">
+    <div class="eyebrow">Free · Open source · No account required</div>
+    <h1>Check your question bank without uploading it.</h1>
+    <p class="lead">Find missing answers, duplicate stems, malformed options, and absent explanations or references. Choose a CSV or JSON file; your questions stay in this browser.</p>
+    <div class="pills"><span class="pill">100% local validation</span><span class="pill">CSV / JSON</span><span class="pill">No external APIs</span><span class="pill">MIT licensed</span></div>
+    <div class="grid">
+      <section class="panel" aria-labelledby="input-title">
+        <h2 id="input-title">1. Choose an MCQ file</h2>
+        <p class="muted">Maximum 5 MiB / 5,000 questions. Supports four-option (A–D) MCQs. File selection never sends your data to a server.</p>
+        <div class="drop" id="drop">
+          <strong>Drop a CSV or JSON file here</strong>
+          <label for="input">or select a file from your device</label>
+          <input id="input" type="file" accept=".csv,.json,text/csv,application/json">
+          <p id="selection" class="muted">No file selected</p>
+        </div>
+        <div class="buttons">
+          <button id="clean" class="secondary" type="button">Try valid sample</button>
+          <button id="broken" class="secondary" type="button">Try flagged sample</button>
+        </div>
+        <details>
+          <summary>Advanced: custom column mapping</summary>
+          <p class="muted">Optional JSON object mapping standard fields to your column names. Evaluated only on your device.</p>
+          <label for="mapping">Column mapping JSON</label>
+          <textarea id="mapping" spellcheck="false" placeholder='{"id":"qid","stem":"prompt","answer":"correct_key"}'></textarea>
+        </details>
+        <div class="buttons">
+          <button id="run" class="primary" type="button">Run local checks</button>
+          <button id="download" class="secondary" type="button" disabled>Download JSON report</button>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite">Select a file or try one of the synthetic samples to begin.</div>
+      </section>
+      <section class="panel" aria-labelledby="results-title">
+        <h2 id="results-title">2. Review the findings</h2>
+        <p class="muted">This browser preview checks structural quality, not medical correctness. For heuristic near-duplicate detection and CI use, install the <a href="https://github.com/hossamkadasi/surgcore-mcq-validator">Python CLI</a>.</p>
+        <div class="stats" id="stats" aria-live="polite">
+          <div class="stat"><strong id="total">—</strong><span>Questions checked</span></div>
+          <div class="stat"><strong id="valid">—</strong><span>Structurally valid</span></div>
+          <div class="stat"><strong id="errors">—</strong><span>Errors</span></div>
+          <div class="stat"><strong id="warnings">—</strong><span>Warnings</span></div>
+        </div>
+        <h3>Detected issues</h3>
+        <ul id="issues" class="issue-list" aria-label="Validation issues"><li class="muted">Findings will appear here after validation.</li></ul>
+      </section>
+    </div>
+    <aside class="footer-note"><strong>Privacy and limitations:</strong> Your selected question file is read locally in JavaScript and is never uploaded by this demo. The page loads its static scripts and styles from its host but has no telemetry or network endpoints. The downloaded report may contain question IDs and issue metadata; keep it private. Structural validation cannot establish clinical accuracy. <a href="https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1" target="_blank" rel="noopener noreferrer">Share feedback using synthetic examples.</a></aside>
+  </main>
+</body>
+</html>

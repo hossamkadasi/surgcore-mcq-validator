@@ -18,6 +18,12 @@ The validator was designed for the needs of medical education question banks, bu
 - Supports human-readable output and JSON reports for downstream review.
 - MIT licensed, with synthetic examples only.
 
+## Browser preview (no Python installation)
+
+A local-only, dependency-free **browser demo** is included in [demo/index.html](demo/index.html). Download the repository ZIP, extract it and open that HTML file in a modern browser. Try the built-in synthetic samples, check CSV/JSON files with optional column mapping, and download a JSON report without uploading questions to a server. [Preview instructions and limitations](docs/BROWSER_DEMO.md).
+
+The preview does not run the Python CLI's heuristic near-duplicate scan and does not verify medical answers. Public web hosting is a separate step: this repository link alone is not a live public demo.
+
 ## Quick start
 
 **New here?** Follow the [5-minute pilot guide](docs/PILOT_TESTING.md) using artificial data; no account, API key, or sensitive question bank is required. [Report feedback](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1) using a synthetic reproduction.
