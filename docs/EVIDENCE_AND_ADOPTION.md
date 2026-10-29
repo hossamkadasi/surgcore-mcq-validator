@@ -16,6 +16,10 @@
 - GitHub job logs independently confirmed **50 passing unit tests per Python version**, plus validation of both the ordinary and custom-mapped synthetic examples.
 - [Community feedback request](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1) is an invitation, **not** proof of external engagement.
 
+- [v0.2.1 safe-report and threshold fix](https://github.com/hossamkadasi/surgcore-mcq-validator/pull/2) was merged into `main` after passing GitHub Actions tests.
+- [GitHub Actions main-branch run #40930922609](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609): **success** on Python 3.10 and Python 3.13 with 61 unit tests in the reviewed change.
+- [Pilot tester instructions](PILOT_TESTING.md) are published; publishing instructions does **not** demonstrate that anyone has used them.
+
 ## Adoption status at initial publication (2026-10-29)
 
 - Public GitHub repository was newly created on 2026-10-29.

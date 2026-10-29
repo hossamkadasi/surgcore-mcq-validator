@@ -20,6 +20,9 @@ The validator was designed for the needs of medical education question banks, bu
 
 ## Quick start
 
+**New here?** Follow the [5-minute pilot guide](docs/PILOT_TESTING.md) using artificial data; no account, API key, or sensitive question bank is required. [Report feedback](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1) using a synthetic reproduction.
+
+
 From this repository root, without installing anything:
 
 ```bash
@@ -144,7 +147,7 @@ Tests run offline. A green test suite is not a substitute for evaluating the val
 - Verified opt-in CI integration for external question banks; [example workflow](docs/GITHUB_ACTIONS_INTEGRATION.md) (this repository's own test workflow already runs).
 - User-supplied clinical evidence metadata checks (without claiming factual verification).
 
-We welcome reports of reproducible bugs, test cases based on synthetic data, and contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [community-validation feedback issue](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1).
+We welcome reports of reproducible bugs, test cases based on synthetic data, and contributions. The [pilot guide](docs/PILOT_TESTING.md) explains how to give actionable feedback without exposing private data. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [community-validation feedback issue](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1).
 
 ## License
 
