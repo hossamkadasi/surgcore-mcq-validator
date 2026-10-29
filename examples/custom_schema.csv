@@ -1,0 +1,2 @@
+qid,prompt,choice_one,choice_two,choice_three,choice_four,key,reason,citation
+EX-001,Which option identifies the correct answer field?,alpha,beta,gamma,delta,B,This row is a synthetic schema demonstration.,Synthetic dataset

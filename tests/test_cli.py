@@ -61,6 +61,24 @@ class CliTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(json.loads(report_path.read_text(encoding="utf-8"))["summary"]["record_count"], 1)
 
+    def test_cli_mapping_works(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "bank.csv"
+            path.write_text("qid,prompt,one,two,three,four,key\nX1,What is the correct label in the mapping example?,alpha,beta,gamma,delta,C\n", encoding="utf-8")
+            config = Path(folder) / "mapping.json"
+            config.write_text(json.dumps({"id": "qid", "stem": "prompt", "option_a": "one", "option_b": "two", "option_c": "three", "option_d": "four", "answer": "key"}), encoding="utf-8")
+            code, out, _ = self.run_cli(["validate", str(path), "--mapping", str(config), "--format", "json"])
+            self.assertEqual(code, 0)
+            self.assertEqual(json.loads(out)["summary"]["schema_valid_record_count"], 1)
+
+    def test_missing_mapping_file_returns_2(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "good.json"
+            path.write_text(json.dumps(GOOD), encoding="utf-8")
+            code, _, err = self.run_cli(["validate", str(path), "--mapping", str(Path(folder) / "missing.json")])
+            self.assertEqual(code, 2)
+            self.assertIn("Mapping file not found", err)
+
     def test_missing_file(self):
         code, _, err = self.run_cli(["validate", "/missing/example.csv"])
         self.assertEqual(code, 2)

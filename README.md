@@ -8,6 +8,9 @@ The validator was designed for the needs of medical education question banks, bu
 
 - Runs locally; **no uploads, accounts, analytics, API keys, or network requests**.
 - Works with JSON and CSV; Python 3.10+; no runtime dependencies.
+- Supports explicit field mapping for differently named CSV/JSON columns (v0.2.0).
+- Compares option strings without discarding clinically significant symbols such as `<`, `>`, `+`, `-`, and decimal points.
+- Rejects ambiguous CSV headers or nested A-E/5-choice input instead of silently dropping answers.
 - Supports English and other Unicode text (including Arabic) for normalization.
 - Separates blocking `error`s from non-blocking `warning`s.
 - Supports human-readable output and JSON reports for downstream review.
@@ -48,6 +51,16 @@ Warnings can block CI or import gates if desired:
 PYTHONPATH=src python -m surgcore_mcq_validator validate examples/synthetic_questions.csv --fail-on warning
 ```
 
+### Custom input column names (v0.2.0)
+
+If your file uses different headers, use an explicit mapping. The source column names below are **synthetic**, not private exam material:
+
+```bash
+PYTHONPATH=src python -m surgcore_mcq_validator validate examples/custom_schema.csv --mapping examples/column_mapping.json
+```
+
+The mapping JSON maps canonical names (`id`, `stem`, `option_a`, `option_b`, `option_c`, `option_d`, `answer`, `explanation`, `source`) to the corresponding source keys. Unmapped fields retain standard aliases. All four options remain mandatory and the validator rejects five-option JSON objects/lists rather than truncating them.
+
 Use `--no-near-duplicates` to disable the optional fuzzy-stem check or `--similarity 0.95` to adjust its sensitivity (allowed range: 0.80-1.00).
 
 ## Supported schema
@@ -87,7 +100,7 @@ Extra columns are ignored; `explanation` and `source` may be omitted but trigger
 | --- | --- | --- |
 | Error | `missing_id`, `duplicate_id` | Missing or repeated question identifiers |
 | Error | `missing_stem`, `missing_option` | Empty question or A-D choice |
-| Error | `duplicate_option` | Two options normalize to the same text |
+| Error | `duplicate_option` | Two options match after case/whitespace and superficial punctuation normalization (clinical operators and decimals are preserved) |
 | Error | `missing_answer`, `invalid_answer` | No answer or label outside A-D |
 | Error | `duplicate_stem` | Stems match after case/punctuation/space normalization |
 | Warning | `short_stem` | Stem is unusually short |
@@ -102,7 +115,7 @@ JSON reports include issue location, stable code, severity, related record (when
 
 - `0`: no issues meeting the failure policy (`--fail-on error` by default).
 - `1`: one or more issues meet the failure policy.
-- `2`: invalid input, unsupported format, file error, or invalid threshold.
+- `2`: invalid input, unsupported format, ambiguous columns, file error, or invalid threshold.
 
 ## Testing
 
@@ -122,9 +135,9 @@ Tests run offline. A green test suite is not a substitute for evaluating the val
 
 ## Roadmap (not yet implemented)
 
-- Configurable import mapping for diverse MCQ schemas.
+- Optional multi-file batch reports for heterogeneous banks.
 - Human-in-the-loop review bundles for near duplicates.
-- Optional CI integration after verifying workflow billing availability.
+- Verified opt-in CI integration for external question banks; [example workflow](docs/GITHUB_ACTIONS_INTEGRATION.md) (this repository's own test workflow already runs).
 - User-supplied clinical evidence metadata checks (without claiming factual verification).
 
 We welcome reports of reproducible bugs, test cases based on synthetic data, and contributions. See [CONTRIBUTING.md](CONTRIBUTING.md).

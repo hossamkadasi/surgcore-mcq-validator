@@ -1,0 +1,11 @@
+{
+  "id": "qid",
+  "stem": "prompt",
+  "option_a": "choice_one",
+  "option_b": "choice_two",
+  "option_c": "choice_three",
+  "option_d": "choice_four",
+  "answer": "key",
+  "explanation": "reason",
+  "source": "citation"
+}

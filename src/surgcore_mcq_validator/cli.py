@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
-from .loader import InputError, load_questions
+from .loader import InputError, load_questions, read_mapping
 from .models import ValidationReport
 from .validator import validate_questions
 
@@ -35,6 +35,7 @@ def main(argv: list[str] | None = None) -> int:
     validate_parser = subparsers.add_parser("validate", help="Validate local CSV/JSON questions")
     validate_parser.add_argument("file", type=Path, help="Local .csv or .json input")
     validate_parser.add_argument("--format", choices=("text", "json"), default="text", help="Report format")
+    validate_parser.add_argument("--mapping", type=Path, help="JSON mapping of canonical fields to CSV/JSON source keys")
     validate_parser.add_argument("--output", type=Path, help="Write report to a local file")
     validate_parser.add_argument("--fail-on", choices=("error", "warning"), default="error", help="What triggers exit status 1")
     validate_parser.add_argument("--similarity", type=float, default=0.92, help="Near-duplicate threshold (0.80-1.00)")
@@ -42,7 +43,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        questions = load_questions(args.file)
+        mapping = read_mapping(args.mapping) if args.mapping else None
+        questions = load_questions(args.file, field_mapping=mapping)
         report = validate_questions(
             questions, near_duplicate_threshold=args.similarity,
             check_near_duplicates=not args.no_near_duplicates,

@@ -50,6 +50,18 @@ class ValidatorTests(unittest.TestCase):
     def test_duplicate_option(self):
         self.assertIn("duplicate_option", self.codes(question(options=("same value", " same VALUE! ", "three", "four"))))
 
+    def test_clinical_comparison_symbols_do_not_collapse(self):
+        options = ("pH < 7.30", "pH > 7.30", "pH = 7.30", "pH >= 7.30")
+        self.assertNotIn("duplicate_option", self.codes(question(options=options)))
+
+    def test_positive_negative_and_decimal_choices_do_not_collapse(self):
+        options = ("+1", "-1", "1.0", "10")
+        self.assertNotIn("duplicate_option", self.codes(question(options=options)))
+
+    def test_superficial_punctuation_still_deduplicates(self):
+        options = ("same VALUE!", "Same value", "another", "different")
+        self.assertIn("duplicate_option", self.codes(question(options=options)))
+
     def test_missing_answer(self):
         self.assertIn("missing_answer", self.codes(question(answer="")))
 
@@ -163,6 +175,98 @@ class LoaderTests(unittest.TestCase):
             path.write_text("hello", encoding="utf-8")
             with self.assertRaises(InputError):
                 load_questions(path)
+
+
+
+class MappingTests(unittest.TestCase):
+    def write(self, folder, name, content):
+        path = Path(folder) / name
+        path.write_text(content, encoding="utf-8")
+        return path
+
+    def test_explicit_csv_mapping(self):
+        with tempfile.TemporaryDirectory() as folder:
+            dataset = self.write(folder, "questions.csv", "qid,prompt,one,two,three,four,key\nX1,What is the correct label in this example?,a,b,c,d,D\n")
+            mapping = {"id": "qid", "stem": "prompt", "option_a": "one", "option_b": "two", "option_c": "three", "option_d": "four", "answer": "key"}
+            row = load_questions(dataset, field_mapping=mapping)[0]
+            self.assertEqual(row.question_id, "X1")
+            self.assertEqual(row.answer, "D")
+            self.assertEqual(row.options, ("a", "b", "c", "d"))
+
+    def test_mapping_file(self):
+        from surgcore_mcq_validator import read_mapping
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "mapping.json", '{"stem": "Prompt", "answer": "key"}')
+            self.assertEqual(read_mapping(path), {"stem": "prompt", "answer": "key"})
+
+    def test_unknown_mapping_key_rejected(self):
+        from surgcore_mcq_validator import read_mapping
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "mapping.json", '{"not_a_field": "prompt"}')
+            with self.assertRaises(InputError):
+                read_mapping(path)
+
+    def test_duplicate_mapping_sources_rejected(self):
+        from surgcore_mcq_validator import read_mapping
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "mapping.json", '{"id": "key", "answer": "key"}')
+            with self.assertRaises(InputError):
+                read_mapping(path)
+
+    def test_mapping_onto_nested_json_no_legacy_change(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.json", json.dumps([{"id": "Q1", "stem": "Where is the answer label recorded?", "options": {"A": "one", "B": "two", "C": "three", "D": "four"}, "answer": "B"}]))
+            self.assertEqual(load_questions(path)[0].answer, "B")
+
+    def test_5_options_list_rejected_instead_of_silent_dropping(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.json", json.dumps([{"id": "Q1", "options": ["a", "b", "c", "d", "e"]}]))
+            with self.assertRaisesRegex(InputError, "exactly 4"):
+                load_questions(path)
+
+    def test_5_options_object_rejected_instead_of_silent_dropping(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.json", json.dumps([{"id": "Q1", "options": {"A":"a", "B":"b", "C":"c", "D":"d", "E":"e"}}]))
+            with self.assertRaisesRegex(InputError, "exactly A"):
+                load_questions(path)
+
+    def test_duplicate_csv_headers_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.csv", "id,id,stem\n1,2,Question question question?\n")
+            with self.assertRaisesRegex(InputError, "unique"):
+                load_questions(path)
+
+    def test_extra_csv_fields_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.csv", "id,stem\nQ1,Question question question?,unexpected\n")
+            with self.assertRaisesRegex(InputError, "more fields"):
+                load_questions(path)
+
+    def test_empty_csv_header_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.csv", "id,,stem\nQ1,x,Question question question?\n")
+            with self.assertRaisesRegex(InputError, "nonempty"):
+                load_questions(path)
+
+    def test_unsupported_nested_options_type_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "questions.json", json.dumps([{"id": "Q1", "options": "A,B,C,D"}]))
+            with self.assertRaisesRegex(InputError, "options must"):
+                load_questions(path)
+
+    def test_invalid_mapping_value_rejected(self):
+        from surgcore_mcq_validator import read_mapping
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "mapping.json", '{"stem": 99}')
+            with self.assertRaisesRegex(InputError, "nonempty string"):
+                read_mapping(path)
+
+    def test_nonobject_mapping_rejected(self):
+        from surgcore_mcq_validator import read_mapping
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.write(folder, "mapping.json", '["a", "b"]')
+            with self.assertRaises(InputError):
+                read_mapping(path)
 
 
 if __name__ == "__main__":

@@ -23,6 +23,20 @@ def normalize_text(value: str) -> str:
     return " ".join(re.findall(r"\w+", unicode_normalized, flags=re.UNICODE))
 
 
+def normalize_option(value: str) -> str:
+    """Normalize choice text without losing clinically meaningful operators.
+
+    Unlike stem normalization, choice normalization must preserve symbols such
+    as `<`, `>`, `+`, `-`, and decimal points. Stripping these could wrongly
+    flag different pH, dose, or laboratory values as duplicate choices.
+    """
+    result = unicodedata.normalize("NFKC", value).casefold().strip()
+    result = " ".join(result.split())
+    # Discard only superficial boundary punctuation; preserve operators.
+    superficial = ' .,!?:;\"\'“”‘’'
+    return result.strip(superficial) or result
+
+
 def _shingles(stem: str) -> set[str]:
     tokens = stem.split()
     if len(tokens) < 4:
@@ -77,7 +91,7 @@ def validate_questions(
 
         present_options: dict[str, str] = {}
         for letter, option_text in zip(OPTION_LETTERS, question.options):
-            normalized_option = normalize_text(option_text)
+            normalized_option = normalize_option(option_text)
             if not normalized_option:
                 flag(question, "error", "missing_option", f"Option {letter} is empty")
             elif normalized_option in present_options:
