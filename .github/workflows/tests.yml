@@ -37,3 +37,16 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m surgcore_mcq_validator validate examples/synthetic_questions.csv
+
+  browser:
+    name: Local browser validator tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate browser-preview engine
+        run: node --test demo/tests/browser-validator.test.cjs
