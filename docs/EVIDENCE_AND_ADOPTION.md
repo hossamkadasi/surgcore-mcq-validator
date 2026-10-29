@@ -20,6 +20,12 @@
 - [GitHub Actions main-branch run #40930922609](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609): **success** on Python 3.10 and Python 3.13 with 61 unit tests in the reviewed change.
 - [Pilot tester instructions](PILOT_TESTING.md) are published; publishing instructions does **not** demonstrate that anyone has used them.
 
+## Browser trial distribution (2026-10-30)
+
+- [Public demo address](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) backed by a dedicated Cloudflare Worker; Cloudflare API shows 100% deployment and enabled subdomain. The live URL was **not independently HTTP-loaded** from the current execution environment.
+- Node.js CI [run #40957177430](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40957177430) passed 20 synthetic tests; Python 3.10 and 3.13 jobs also succeeded.
+- This is **distribution readiness**, not evidence of independent users. Obtain genuine tester feedback at [Issue #1](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1).
+
 ## Adoption status at initial publication (2026-10-29)
 
 - Public GitHub repository was newly created on 2026-10-29.
