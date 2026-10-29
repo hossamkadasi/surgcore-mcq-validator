@@ -1,4 +1,4 @@
-"""Unit tests run with python -m unittest discover -s tests -v."""
+"""Unit tests run with `python -m unittest discover -s tests -v`."""
 
 import json
 import tempfile
