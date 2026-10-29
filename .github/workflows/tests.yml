@@ -50,3 +50,24 @@ jobs:
           node-version: '22'
       - name: Validate browser-preview engine
         run: node --test demo/tests/browser-validator.test.cjs
+
+  composite_action:
+    name: Reusable GitHub Action smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Validate ordinary synthetic fixture through composite action
+        uses: ./
+        with:
+          file: examples/synthetic_questions.csv
+          fail-on: warning
+      - name: Validate mapped synthetic fixture through composite action
+        uses: ./
+        with:
+          file: examples/custom_schema.csv
+          mapping: examples/column_mapping.json
+          fail-on: warning
+          no-near-duplicates: 'true'
