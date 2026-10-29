@@ -6,9 +6,9 @@ This is a **truthful preparation record**, not a submitted application or an Ope
 
 - Repository: https://github.com/hossamkadasi/surgcore-mcq-validator (public, MIT).
 - GitHub maintainer: `hossamkadasi` (repository owner and writer).
-- Current code version: `0.2.0` (version identifier; no formal GitHub Release is asserted).
-- 50 automated tests on Python 3.10 and 3.13: https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40910419913
-- Synthetic CLI examples, public contribution instructions and a feedback request: https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1
+- Current code version: `0.2.1` (version identifier; no formal GitHub Release is asserted).
+- 61 automated unit tests on Python 3.10 and 3.13: https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609 (successful after PR #2 merged)
+- Synthetic CLI examples, [a five-minute external tester guide](PILOT_TESTING.md), public contribution instructions and a feedback request: https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1
 - Software tests **only structural MCQ quality**; it does not independently establish medical answer correctness.
 
 ## Outstanding evidence

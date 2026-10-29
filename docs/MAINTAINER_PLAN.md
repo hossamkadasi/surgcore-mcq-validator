@@ -8,6 +8,8 @@ This is a planning document, not evidence of adoption or eligibility for any ext
 - 2026-10-29: GitHub Actions tests succeeded on Python 3.10 and 3.13 ([first successful run](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40899999185)).
 - 2026-10-29: Published v0.2.0 data-mapping and malformed-input safeguards; [GitHub CI passed](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40910419913) on Python 3.10 and 3.13 with 50 tests each.
 
+- 2026-10-29: Merged [PR #2](https://github.com/hossamkadasi/surgcore-mcq-validator/pull/2) fixing clinical-threshold duplicate matching and report-output safety. [GitHub Actions main run](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609) passed, with 61 unit tests on Python 3.10 and 3.13.
+
 ## Near-term maintenance goals
 
 - Invite genuine feedback and bug reports based on synthetic or permissioned datasets.
