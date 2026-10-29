@@ -9,6 +9,13 @@
 - Regression tests cover JSON/CSV parsing, invalid answer labels, duplicate stems/options/IDs, field mapping, and malformed input.
 - Official review and CI checks are structural only; **they do not certify medical correctness**.
 
+## Verified GitHub CI results (2026-10-29)
+
+- [v0.2.0 commit](https://github.com/hossamkadasi/surgcore-mcq-validator/commit/6969545e7a5405b269225fdf455ba0705ef9ff9c).
+- [GitHub Actions run #40910419913](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40910419913): **success** on Python 3.10 and 3.13.
+- GitHub job logs independently confirmed **50 passing unit tests per Python version**, plus validation of both the ordinary and custom-mapped synthetic examples.
+- [Community feedback request](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1) is an invitation, **not** proof of external engagement.
+
 ## Adoption status at initial publication (2026-10-29)
 
 - Public GitHub repository was newly created on 2026-10-29.

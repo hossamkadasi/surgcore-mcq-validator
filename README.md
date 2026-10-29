@@ -1,5 +1,7 @@
 # SurgCore MCQ Validator
 
+[![Python tests](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/workflows/tests.yml/badge.svg)](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/workflows/tests.yml)
+
 **An offline, open-source quality checker for multiple-choice question (MCQ) datasets.**
 
 Before importing educational questions into a quiz application, check for missing or duplicated IDs, malformed choices, unsupported answer labels, absent explanations/references, and identical or *potentially* similar question stems. The CLI also emits machine-readable JSON for review workflows.
@@ -140,7 +142,7 @@ Tests run offline. A green test suite is not a substitute for evaluating the val
 - Verified opt-in CI integration for external question banks; [example workflow](docs/GITHUB_ACTIONS_INTEGRATION.md) (this repository's own test workflow already runs).
 - User-supplied clinical evidence metadata checks (without claiming factual verification).
 
-We welcome reports of reproducible bugs, test cases based on synthetic data, and contributions. See [CONTRIBUTING.md](CONTRIBUTING.md).
+We welcome reports of reproducible bugs, test cases based on synthetic data, and contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [community-validation feedback issue](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1).
 
 ## License
 

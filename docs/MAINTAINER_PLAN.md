@@ -6,7 +6,7 @@ This is a planning document, not evidence of adoption or eligibility for any ext
 
 - 2026-10-29: Published an MIT-licensed repository with a runnable CLI and artificial samples.
 - 2026-10-29: GitHub Actions tests succeeded on Python 3.10 and 3.13 ([first successful run](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40899999185)).
-- 2026-10-29: Prepared v0.2.0 local data-mapping and malformed-input tests. CI status for this version must be checked independently after publication.
+- 2026-10-29: Published v0.2.0 data-mapping and malformed-input safeguards; [GitHub CI passed](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40910419913) on Python 3.10 and 3.13 with 50 tests each.
 
 ## Near-term maintenance goals
 
