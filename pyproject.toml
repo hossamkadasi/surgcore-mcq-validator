@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "surgcore-mcq-validator"
+version = "0.1.0"
+description = "Offline and privacy-preserving structural validation of medical education MCQ banks"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "SurgCore Open Source Contributors"}]
+keywords = ["medical-education", "mcq", "quality-assurance", "open-source", "offline"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Education :: Testing",
+]
+dependencies = []
+
+[project.scripts]
+surgcore-mcq-validator = "surgcore_mcq_validator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

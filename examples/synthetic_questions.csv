@@ -1,0 +1,3 @@
+id,stem,option_a,option_b,option_c,option_d,answer,explanation,source
+DEMO-101,Which column normally stores the answer label?,stem,answer,source,explanation,B,The answer column stores the label,Synthetic schema example
+DEMO-102,Which text format supports key-value pairs?,JSON,PNG,MP3,JPG,A,JSON supports key-value data,Synthetic schema example

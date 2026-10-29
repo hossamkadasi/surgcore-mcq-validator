@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "id": "DEMO-001",
+      "stem": "Which column normally contains the correct answer label in this example schema?",
+      "options": {"A": "source", "B": "answer", "C": "id", "D": "explanation"},
+      "answer": "B",
+      "explanation": "The answer field identifies the selected option label.",
+      "source": "Synthetic schema example"
+    },
+    {
+      "id": "DEMO-002",
+      "stem": "Which format commonly stores a list of records as structured objects?",
+      "options": {"A": "JSON", "B": "PNG", "C": "MP3", "D": "JPG"},
+      "answer": "A",
+      "explanation": "JSON supports arrays and objects.",
+      "source": "Synthetic schema example"
+    },
+    {
+      "id": "DEMO-003",
+      "stem": "Which format commonly stores a list of records as structured objects?",
+      "options": {"A": "JSON", "B": "PNG", "C": "MP3", "D": "JPG"},
+      "answer": "E",
+      "explanation": "This intentionally invalid row demonstrates error reporting.",
+      "source": "Synthetic intentionally flawed example"
+    }
+  ]
+}
