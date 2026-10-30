@@ -6,8 +6,8 @@ This is a **truthful preparation record**, not a submitted application or an Ope
 
 - Repository: https://github.com/hossamkadasi/surgcore-mcq-validator (public, MIT).
 - GitHub maintainer: `hossamkadasi` (repository owner and writer).
-- Current source version: `0.3.0`. The versioned GitHub Release is published by a CI-gated workflow and must be verified on the Releases page before claiming a public release or download counts.
-- 61 automated unit tests on Python 3.10 and 3.13: https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609 (successful after PR #2 merged)
+- Official GitHub Release: [v0.3.0](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) — published 2026-10-30, with a browser ZIP and installable Python wheel. GitHub API verified that both assets were uploaded and the release tag points to commit `d099c694a02498c6736876e4c1d0c191b0c8b5fb`.
+- 61 Python tests on each of Python 3.10 and 3.13, 20 JavaScript tests, 2 composite-action fixtures, and the release publication job all passed in [GitHub Actions run #41110543998](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/41110543998).
 - Public demo: https://surgcore-mcq-demo.pages.dev/ — validated as accessible with successful synthetic interaction tests on 2026-10-29. This is technical QA, **not** external adoption evidence.
 - Synthetic CLI examples, [a five-minute external tester guide](PILOT_TESTING.md), public contribution instructions and a feedback request: https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1
 - Software tests **only structural MCQ quality**; it does not independently establish medical answer correctness.
@@ -32,7 +32,7 @@ All text describes actual published functionality and verified tests, **not** ex
 
 - External maintainers or third-party users: **not verified**.
 - Real downloads, integrations and impact: **not verified**.
-- Sustained issue triage, external PR reviews and release history: **not yet established**.
+- Sustained issue triage, external PR reviews, and multiple independent releases: **not yet established**. The first formal GitHub Release is verified, but does not show third-party adoption.
 - Integration into SurgCore Pro production: **not verified**; production remains unchanged.
 
 OpenAI's program values meaningful use, broad adoption, or clear ecosystem importance and active maintenance. A green CI build and a newly created repository are not substitutes for those signals. We should not describe an unproven deployment, downloads or adoption as established facts.

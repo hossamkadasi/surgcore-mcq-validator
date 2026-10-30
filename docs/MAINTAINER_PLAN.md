@@ -10,11 +10,13 @@ This is a planning document, not evidence of adoption or eligibility for any ext
 
 - 2026-10-29: Merged [PR #2](https://github.com/hossamkadasi/surgcore-mcq-validator/pull/2) fixing clinical-threshold duplicate matching and report-output safety. [GitHub Actions main run](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609) passed, with 61 unit tests on Python 3.10 and 3.13.
 
+- 2026-10-30: Published the [formal v0.3.0 release](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) with wheel + offline demo ZIP after [verified GitHub CI](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/41110543998).
+
 ## Near-term maintenance goals
 
 - Invite genuine feedback and bug reports based on synthetic or permissioned datasets.
 - Document actual external adoption and reviewed pull requests with public URLs.
-- Publish formal GitHub releases after CI passes; a version string alone is not a release.
+- Maintain CI-gated GitHub releases as versions advance; require reviewed `docs/releases/vX.Y.Z.md` notes before publishing.
 - Independently test private/question-bank integration without uploading any proprietary data.
 
 ## Evidence to collect before applying to a maintainer program
