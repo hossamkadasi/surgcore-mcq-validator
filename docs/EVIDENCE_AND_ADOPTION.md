@@ -41,6 +41,13 @@
 - Action smoke job validated **two synthetic CSV fixtures**: standard headers (2 records, no errors/warnings) and custom mapping (1 record, no errors/warnings).
 - The reusable Action is published and can be consumed by other repositories through its pinned SHA. **No independent downstream adoption is claimed.**
 
+## Formal GitHub Release (2026-10-30)
+
+- [Official v0.3.0 release](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) published 2026-10-30; public, non-draft, and non-prerelease.
+- [Gated main-branch CI run #41110543998](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/41110543998) succeeded, including Python 3.10/3.13, browser JavaScript, two synthetic composite Action fixtures, and the release packaging and publication job.
+- GitHub REST evidence confirmed two downloadable assets: `surgcore-mcq-browser-demo-v0.3.0.zip` (10,068 bytes) and `surgcore_mcq_validator-0.3.0-py3-none-any.whl` (15,716 bytes). Release tag points to main commit `d099c694a02498c6736876e4c1d0c191b0c8b5fb`.
+- The first snapshot of public asset download counters was **zero** immediately after publication. Do not infer external adoption from those counts or from internal QA downloads.
+
 ## Adoption status at initial publication (2026-10-29)
 
 - Public GitHub repository was newly created on 2026-10-29.

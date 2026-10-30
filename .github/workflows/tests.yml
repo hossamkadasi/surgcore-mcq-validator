@@ -73,7 +73,7 @@ jobs:
           no-near-duplicates: 'true'
 
   release:
-    name: Publish verified v0.3.0 release
+    name: Publish verified versioned release
     needs: [tests, browser, composite_action]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -92,13 +92,19 @@ jobs:
         id: version
         run: |
           python - <<'PY'
-          import os, tomllib
+          import os, re, tomllib
+          from pathlib import Path
           with open('pyproject.toml', 'rb') as file:
               version = tomllib.load(file)['project']['version']
-          if version != '0.3.0':
-              raise SystemExit(f'Release job only supports v0.3.0 (got {version})')
+          if re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version) is None:
+              raise SystemExit('A stable semver package version is required')
+          tag = 'v' + version
+          notes = Path('docs/releases') / (tag + '.md')
+          if not notes.is_file():
+              raise SystemExit(f'Missing reviewed release notes: {notes}')
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
-              file.write('tag=v' + version + '\n')
+              file.write('tag=' + tag + '\n')
+              file.write('notes=' + str(notes) + '\n')
           PY
       - name: Check whether release exists
         id: release_check
@@ -114,13 +120,16 @@ jobs:
           fi
       - name: Build versioned downloadable artifacts
         if: steps.release_check.outputs.publish == 'true'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
           python -m pip wheel . --no-deps --wheel-dir dist
-          python -m zipfile -c dist/surgcore-mcq-browser-demo-v0.3.0.zip demo/index.html demo/app.js demo/validator.js demo/styles.css demo/_headers demo/robots.txt demo/sitemap.xml
+          python -m zipfile -c "dist/surgcore-mcq-browser-demo-${TAG}.zip" demo/index.html demo/app.js demo/validator.js demo/styles.css demo/_headers demo/robots.txt demo/sitemap.xml
       - name: Publish verified release
         if: steps.release_check.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
+          NOTES: ${{ steps.version.outputs.notes }}
         run: |
-          gh release create "$TAG" dist/* --target "$GITHUB_SHA" --title "SurgCore MCQ Validator $TAG" --notes-file docs/releases/v0.3.0.md
+          gh release create "$TAG" dist/* --target "$GITHUB_SHA" --title "SurgCore MCQ Validator $TAG" --notes-file "$NOTES"
