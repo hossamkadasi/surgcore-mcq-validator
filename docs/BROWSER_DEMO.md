@@ -9,7 +9,7 @@ Open [demo/index.html](../demo/index.html) in any modern browser after downloadi
 The browser preview:
 
 - Processes selected **CSV or JSON files in browser memory only**.
-- Supports custom column mappings and downloads a JSON report to the user's device.
+- Supports custom column mappings, downloads JSON reports to the user's device, and **opens previously saved reports for local viewing** (without rerunning question checks).
 - Checks IDs, stems, four choices, answer labels, missing explanations/sources, and exact duplicates.
 - Ships with synthetic success and failure examples for a 30-second test.
 - Uses local JavaScript and CSS, with no third-party scripts, analytics, remote fonts, or API calls.
@@ -40,6 +40,10 @@ An independent browser load returned HTTP 200, and interactive testing confirmed
 These are **maintainer-run verification tests**, not user adoption metrics. If the Pages URL is inaccessible on your network, an [alternative Cloudflare Worker host](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) or local ZIP download can be used. The Workers mirror was not part of the independent browser verification described above.
 
 Cloudflare sees HTTP requests for static HTML/JS/CSS and may log client IP addresses; **selected question files are handled entirely in browser memory**, with no remote upload endpoints.
+
+## Reopening a downloaded report
+
+Select the previously downloaded `surgcore-validation-report.json` using the same file picker. The browser identifies the report from its content (not its filename), displays its earlier summary and issues, disables `Run local checks`, and labels these as **saved results, not a new validation**. To run new checks, select the original question bank or a synthetic sample. Reports are not uploaded.
 
 ## Reporting and privacy
 

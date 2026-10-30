@@ -102,6 +102,61 @@
     return mapping;
   }
 
+  // A downloaded report is a snapshot of past results, not a question bank.
+  // Recognize the report by its *structure*, never by its filename.
+  function readSavedReport(text) {
+    if (typeof text !== "string") return null;
+    let parsed;
+    try { parsed = JSON.parse(text); } catch (_) { return null; }
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed) ||
+        Array.isArray(parsed.questions) ||
+        !Object.hasOwn(parsed, "summary") || !Object.hasOwn(parsed, "issues")) return null;
+
+    const malformed = () => fail("This appears to be a saved validation report, but its format is invalid or incomplete.");
+    if (parsed.schema_version !== "1.0" ||
+        !parsed.summary || typeof parsed.summary !== "object" ||
+        Array.isArray(parsed.summary) || !Array.isArray(parsed.issues) ||
+        parsed.issues.length > 20000) malformed();
+
+    const summary = parsed.summary;
+    for (const key of ["record_count", "schema_valid_record_count", "error_count", "warning_count"]) {
+      if (!Number.isSafeInteger(summary[key]) || summary[key] < 0) malformed();
+    }
+    if (summary.schema_valid_record_count > summary.record_count) malformed();
+
+    const issues = parsed.issues.map((item) => {
+      if (!item || typeof item !== "object" || Array.isArray(item) ||
+          !["error", "warning"].includes(item.severity) ||
+          typeof item.code !== "string" || !item.code ||
+          typeof item.message !== "string" ||
+          !Number.isSafeInteger(item.record_index) || item.record_index < 1 ||
+          item.record_index > summary.record_count ||
+          (item.question_id != null && typeof item.question_id !== "string")) malformed();
+      return {
+        severity: item.severity,
+        code: item.code,
+        message: item.message,
+        record_index: item.record_index,
+        question_id: item.question_id || ""
+      };
+    });
+    if (issues.filter(item => item.severity === "error").length !== summary.error_count ||
+        issues.filter(item => item.severity === "warning").length !== summary.warning_count) malformed();
+
+    return {
+      schema_version: "1.0",
+      summary: {
+        record_count: summary.record_count,
+        schema_valid_record_count: summary.schema_valid_record_count,
+        error_count: summary.error_count,
+        warning_count: summary.warning_count,
+        passed_structural_checks: summary.error_count === 0
+      },
+      issues,
+      disclaimer: "Previously saved validation report. These results were NOT rechecked."
+    };
+  }
+
   function parseInput(text, format, mapping) {
     if (typeof text !== "string") fail("Select a text file.");
     if (new TextEncoder().encode(text).length > LIMIT_BYTES) fail("Browser preview supports files up to 5 MiB.");
@@ -111,6 +166,7 @@
     else if (format === "json") {
       let parsed;
       try { parsed = JSON.parse(text); } catch (_) { fail("File is not valid JSON."); }
+      if (readSavedReport(text) !== null) fail("This is a saved validation report, not an MCQ question bank. Open it in the browser preview or select the original MCQ file.");
       raw = Array.isArray(parsed) ? parsed : parsed && parsed.questions;
       if (!Array.isArray(raw)) fail('JSON must be a question array or an object containing "questions".');
     } else fail("Supported file formats: .csv and .json.");
@@ -199,5 +255,5 @@
     };
   }
 
-  return { parseCsv, parseInput, parseMapping, normalizeStem, normalizeOption, validate, LIMIT_BYTES, LIMIT_RECORDS };
+  return { parseCsv, parseInput, parseMapping, readSavedReport, normalizeStem, normalizeOption, validate, LIMIT_BYTES, LIMIT_RECORDS };
 });

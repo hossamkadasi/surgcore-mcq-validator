@@ -285,6 +285,28 @@ class MappingTests(unittest.TestCase):
             with self.assertRaisesRegex(InputError, "nonempty"):
                 load_questions(path)
 
+    def test_saved_report_is_not_question_bank(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "report.json"
+            path.write_text(json.dumps({
+                "schema_version": "1.0",
+                "summary": {"record_count": 1, "error_count": 0, "warning_count": 0},
+                "issues": []
+            }), encoding="utf-8")
+            with self.assertRaisesRegex(InputError, "saved validation report"):
+                load_questions(path)
+
+    def test_question_bank_wrapper_is_not_mistaken_for_report(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "bank.json"
+            path.write_text(json.dumps({
+                "questions": [{"id": "Q1", "stem": "Which field is used here?",
+                               "options": ["a", "b", "c", "d"], "answer": "B"}],
+                "summary": {"record_count": 1},
+                "issues": []
+            }), encoding="utf-8")
+            self.assertEqual(load_questions(path)[0].answer, "B")
+
     def test_unsupported_nested_options_type_rejected(self):
         with tempfile.TemporaryDirectory() as folder:
             path = self.write(folder, "questions.json", json.dumps([{"id": "Q1", "options": "A,B,C,D"}]))

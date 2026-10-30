@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.1 — 2026-10-30
+
+- Allow users to **open previously downloaded JSON reports** in the browser and review earlier issues without revalidating them.
+- Add bilingual report-vs-question-bank guidance and an explicit saved-report status; prevent accidental revalidation of a report.
+- Validate saved-report structure, cap visible findings at 200 for mobile responsiveness, and preserve safe text-only rendering.
+- Improve the Python CLI's error message when a report is mistakenly supplied as input.
+- Add browser, Python and CLI regression tests. No changes to clinical correctness claims.
+
+
 ## 0.3.0 — 2026-10-30
 
 - Added the independent local-only browser preview, hosted on Cloudflare Pages, with CSV/JSON processing, sample questions, issue review, and local JSON report downloads.

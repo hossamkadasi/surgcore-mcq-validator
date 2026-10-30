@@ -130,6 +130,11 @@ def load_questions(filename: str | Path, *, field_mapping: Mapping[str, str] | N
             with path.open("r", encoding="utf-8-sig") as handle:
                 data = json.load(handle)
             if isinstance(data, dict):
+                if ("questions" not in data and "summary" in data and "issues" in data):
+                    raise InputError(
+                        "This file is a saved validation report, not an MCQ question bank. "
+                        "Open it to review previous findings, or validate the original question file."
+                    )
                 data = data.get("questions")
             if not isinstance(data, list):
                 raise InputError('JSON must be a list or {"questions": [...]}')

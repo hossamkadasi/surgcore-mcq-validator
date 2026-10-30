@@ -22,3 +22,5 @@ details{margin-top:14px}summary{cursor:pointer;color:#164b78;font-weight:650}det
 .footer-note{margin-top:28px;background:#eaf0f7;border-radius:13px;padding:16px 20px;font-size:.85rem;color:#3c526d}
 .footer-note a{font-weight:700}.panel h3{margin:23px 0 4px;font-size:1.02rem}
 @media(max-width:800px){.grid{grid-template-columns:1fr}.container{padding-top:24px}.panel{padding:19px}}
+
+.primary:disabled{opacity:.5;cursor:not-allowed}

@@ -34,6 +34,7 @@
           <label for="input">or select a file from your device</label>
           <input id="input" type="file" accept=".csv,.json,text/csv,application/json">
           <p id="selection" class="muted">No file selected</p>
+          <p class="muted">Have a saved JSON report? Select it here to <strong>view earlier findings</strong>; to run new checks, choose the original question file. <span lang="ar" dir="rtl">لفتح تقرير محفوظ، اختر ملف التقرير. ولإجراء فحص جديد، اختر ملف الأسئلة الأصلي.</span></p>
         </div>
         <div class="buttons">
           <button id="clean" class="secondary" type="button">Try valid sample</button>
@@ -53,6 +54,7 @@
       </section>
       <section class="panel" aria-labelledby="results-title">
         <h2 id="results-title">2. Review the findings</h2>
+        <p id="result-context" class="muted" role="status">Run local checks to view results, or select a saved report to see earlier findings.</p>
         <p class="muted">This browser preview checks structural quality, not medical correctness. For heuristic near-duplicate detection and CI use, install the <a href="https://github.com/hossamkadasi/surgcore-mcq-validator">Python CLI</a>.</p>
         <div class="stats" id="stats" aria-live="polite">
           <div class="stat"><strong id="total">—</strong><span>Questions checked</span></div>
