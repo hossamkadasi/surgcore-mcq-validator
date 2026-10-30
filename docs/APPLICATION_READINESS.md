@@ -6,7 +6,7 @@ This is a **truthful preparation record**, not a submitted application or an Ope
 
 - Repository: https://github.com/hossamkadasi/surgcore-mcq-validator (public, MIT).
 - GitHub maintainer: `hossamkadasi` (repository owner and writer).
-- Current code version: `0.2.1` (version identifier; no formal GitHub Release is asserted).
+- Current source version: `0.3.0`. The versioned GitHub Release is published by a CI-gated workflow and must be verified on the Releases page before claiming a public release or download counts.
 - 61 automated unit tests on Python 3.10 and 3.13: https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40930922609 (successful after PR #2 merged)
 - Public demo: https://surgcore-mcq-demo.pages.dev/ — validated as accessible with successful synthetic interaction tests on 2026-10-29. This is technical QA, **not** external adoption evidence.
 - Synthetic CLI examples, [a five-minute external tester guide](PILOT_TESTING.md), public contribution instructions and a feedback request: https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1

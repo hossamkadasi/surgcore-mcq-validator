@@ -4,6 +4,8 @@
 
 **An offline, open-source quality checker for multiple-choice question (MCQ) datasets.**
 
+**Current version:** v0.3.0 — [GitHub Releases](https://github.com/hossamkadasi/surgcore-mcq-validator/releases) (release artifacts are published only after CI passes).
+
 Before importing educational questions into a quiz application, check for missing or duplicated IDs, malformed choices, unsupported answer labels, absent explanations/references, and identical or *potentially* similar question stems. The CLI also emits machine-readable JSON for review workflows.
 
 The validator was designed for the needs of medical education question banks, but works with any four-option educational MCQ bank. **It does not verify the medical accuracy of questions or answers.**

@@ -71,3 +71,56 @@ jobs:
           mapping: examples/column_mapping.json
           fail-on: warning
           no-near-duplicates: 'true'
+
+  release:
+    name: Publish verified v0.3.0 release
+    needs: [tests, browser, composite_action]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out release candidate
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Confirm release version
+        id: version
+        run: |
+          python - <<'PY'
+          import os, tomllib
+          with open('pyproject.toml', 'rb') as file:
+              version = tomllib.load(file)['project']['version']
+          if version != '0.3.0':
+              raise SystemExit(f'Release job only supports v0.3.0 (got {version})')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as file:
+              file.write('tag=v' + version + '\n')
+          PY
+      - name: Check whether release exists
+        id: release_check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo 'publish=false' >> "$GITHUB_OUTPUT"
+            echo 'Release already exists; no new release created.'
+          else
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build versioned downloadable artifacts
+        if: steps.release_check.outputs.publish == 'true'
+        run: |
+          python -m pip wheel . --no-deps --wheel-dir dist
+          python -m zipfile -c dist/surgcore-mcq-browser-demo-v0.3.0.zip demo/index.html demo/app.js demo/validator.js demo/styles.css demo/_headers demo/robots.txt demo/sitemap.xml
+      - name: Publish verified release
+        if: steps.release_check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$TAG" dist/* --target "$GITHUB_SHA" --title "SurgCore MCQ Validator $TAG" --notes-file docs/releases/v0.3.0.md

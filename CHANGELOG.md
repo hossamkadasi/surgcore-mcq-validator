@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-10-30
+
+- Added the independent local-only browser preview, hosted on Cloudflare Pages, with CSV/JSON processing, sample questions, issue review, and local JSON report downloads.
+- Added 20 Node.js regression tests for the browser data-validation engine and a reusable composite GitHub Action for other projects.
+- Added 2 GitHub Action synthetic smoke fixtures, pilot onboarding, strict browser security headers, and automated public-demo checks.
+- Preserved prior v0.2.1 safeguards against unsafe output-file overwrite and losing clinical threshold operators during duplicate screening.
+- Added formal, CI-gated GitHub release artifacts and documentation. A release is only considered published after its GitHub Release page is verified.
+
+
 ## 0.2.1 — 2026-10-29
 
 - Prevent clinical inequalities, numeric thresholds, dose and percent symbols from being erased during question-stem duplicate detection.
