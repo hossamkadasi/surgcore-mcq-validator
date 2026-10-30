@@ -2,7 +2,13 @@
 
 **Goal:** Validate that SurgCore MCQ Validator works for your use case, and share *genuine* feedback. This is not a clinical content certification or a request for real medical exam papers.
 
-## 1. Run it locally
+## 0. Try the hosted, no-install browser demo first
+
+Open the **[public SurgCore MCQ Validator demo](https://surgcore-mcq-demo.pages.dev/)**. No Python installation, account, or credentials are required. Click **Try valid sample → Run local checks** to see two structurally valid questions with no errors or warnings. Then click **Try flagged sample → Run local checks** to see three questions, two structural errors and one warning. This is an independent browser QA reproduction, **not** proof of medical answer correctness or external adoption.
+
+The demo processes selected local CSV or JSON input within your browser; it does not upload questions for validation. Browser validation is a limited subset of the Python CLI and does not perform heuristic near-duplicate detection. Only use files you have permission to process. The [alternate Worker mirror](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) and the [offline downloadable source ZIP](https://github.com/hossamkadasi/surgcore-mcq-validator/archive/refs/heads/main.zip) are available if needed.
+
+## 1. Run the Python CLI locally
 
 Prerequisites: Python 3.10 or newer and Git.
 

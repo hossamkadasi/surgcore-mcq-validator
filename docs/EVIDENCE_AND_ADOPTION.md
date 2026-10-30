@@ -22,7 +22,7 @@
 
 ## Browser trial distribution (2026-10-30)
 
-- [Public demo address](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) backed by a dedicated Cloudflare Worker; Cloudflare API shows 100% deployment and enabled subdomain. The live URL was **not independently HTTP-loaded** from the current execution environment.
+- [Public demo address](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) backed by a dedicated Cloudflare Worker; Cloudflare API shows 100% deployment and enabled subdomain. The Worker URL was **independently HTTP-loaded on 2026-10-30** and returned HTTP 200. Live browser interactions on its synthetic examples matched the expected results: 2 valid questions with zero findings; 3 flagged questions with 2 errors (`duplicate_stem`, `invalid_answer`) and 1 warning (`missing_source`). The separate canonical Pages URL was independently re-verified with the same synthetic results. These checks demonstrate availability and functional behavior only, not external adoption.
 - Node.js CI [run #40957177430](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/40957177430) passed 20 synthetic tests; Python 3.10 and 3.13 jobs also succeeded.
 - This is **distribution readiness**, not evidence of independent users. Obtain genuine tester feedback at [Issue #1](https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1).
 

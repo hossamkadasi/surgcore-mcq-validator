@@ -37,7 +37,7 @@ An independent browser load returned HTTP 200, and interactive testing confirmed
 - Intentionally flagged sample: 3 checked, 2 structurally valid, 2 errors and 1 warning.
 - Both `duplicate_stem` and `invalid_answer` appeared in the flagged sample.
 
-These are **maintainer-run verification tests**, not user adoption metrics. If the Pages URL is inaccessible on your network, an [alternative Cloudflare Worker host](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) or local ZIP download can be used. The Workers mirror was not part of the independent browser verification described above.
+These are **maintainer-run verification tests**, not user adoption metrics. If the Pages URL is inaccessible on your network, an [alternative Cloudflare Worker host](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) or local ZIP download can be used. The [Worker mirror](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) was **also independently verified on 2026-10-30**: HTTPS returned HTTP 200, the valid sample reported 2 checked and 0 errors/warnings, and the intentionally flagged sample reported 3 checked, 2 errors and 1 warning. No visible runtime JavaScript error was observed. These are maintainer QA tests, not independent external adoption.
 
 Cloudflare sees HTTP requests for static HTML/JS/CSS and may log client IP addresses; **selected question files are handled entirely in browser memory**, with no remote upload endpoints.
 
