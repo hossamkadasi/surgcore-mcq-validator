@@ -129,3 +129,73 @@ test("browser validator does not claim near-duplicate semantic detection", () =>
   assert.ok(r.disclaimer.includes("does not run"));
   assert.equal(r.issues.some(x=>x.code==="near_duplicate_stem"),false);
 });
+
+test("previously exported JSON validation report is recognized, not revalidated", () => {
+  const original = check([
+    q("Q1", "Which field stores the answer?"),
+    q("Q2", "Which field stores the answer?", undefined, "E")
+  ]);
+  const parsed = v.readSavedReport(JSON.stringify(original));
+  assert.equal(parsed.summary.record_count, 2);
+  assert.equal(parsed.summary.error_count, 2);
+  assert.ok(parsed.disclaimer.includes("NOT rechecked"));
+  assert.deepEqual(parsed.issues.map(item => item.code), ["duplicate_stem", "invalid_answer"]);
+  assert.throws(() => v.parseInput(JSON.stringify(original), "json"), /saved validation report/);
+});
+
+test("CLI-generated report schema can be opened in browser preview", () => {
+  const saved = {
+    schema_version: "1.0",
+    summary: { record_count: 3, schema_valid_record_count: 2, error_count: 2,
+               warning_count: 1, passed_structural_checks: false },
+    issues: [
+      { severity: "error", code: "duplicate_stem", record_index: 3, question_id: "DEMO-03", message: "Duplicate" },
+      { severity: "error", code: "invalid_answer", record_index: 3, question_id: "DEMO-03", message: "Invalid E" },
+      { severity: "warning", code: "missing_source", record_index: 3, question_id: "DEMO-03", message: "Missing source" }
+    ],
+    disclaimer: "Structural checks only."
+  };
+  const result = v.readSavedReport(JSON.stringify(saved));
+  assert.equal(result.summary.schema_valid_record_count, 2);
+  assert.equal(result.summary.warning_count, 1);
+  assert.equal(result.issues[0].question_id, "DEMO-03");
+});
+
+test("not report: MCQ bank JSON wrappers and arrays still validate normally", () => {
+  const record = q("Q1", "Which field stores the correct answer?");
+  assert.equal(v.readSavedReport(JSON.stringify([record])), null);
+  assert.equal(v.readSavedReport(JSON.stringify({questions:[record]})), null);
+  assert.equal(v.validate(v.parseInput(JSON.stringify([record]), "json")).summary.error_count, 0);
+});
+
+test("report-looking malformed or altered JSON gives specific error", () => {
+  assert.throws(() => v.readSavedReport(JSON.stringify({
+    schema_version: "1.0",
+    summary: {record_count: 3, schema_valid_record_count: 2, error_count: 2, warning_count: 1},
+    issues: []
+  })), /saved validation report/);
+  assert.throws(() => v.readSavedReport(JSON.stringify({
+    schema_version: "2.0", summary: {}, issues: []
+  })), /saved validation report/);
+});
+
+test("report preview preserves issue text for safe textContent display", () => {
+  const original = check([q("<script>alert(1)</script>", "Which choice is correct?",
+    ["alpha", "beta", "gamma", "delta"], "E")]);
+  const saved = v.readSavedReport(JSON.stringify(original));
+  assert.equal(saved.issues[0].question_id, "<script>alert(1)</script>");
+  assert.equal(saved.summary.error_count, 1);
+});
+
+test("arbitrary JSON object without report signature retains schema error", () => {
+  const json = JSON.stringify({summary:"not a report", some_other_field:1});
+  assert.equal(v.readSavedReport(json), null);
+  assert.throws(() => v.parseInput(json, "json"), /question array/);
+});
+
+test("saved report browser limit does not claim to certify medical answers", () => {
+  const original = check([q("Q1", "Which choice is correct?")]);
+  const saved = v.readSavedReport(JSON.stringify(original));
+  assert.ok(saved.disclaimer.includes("NOT rechecked"));
+  assert.equal(saved.summary.passed_structural_checks, true);
+});

@@ -4,7 +4,7 @@
 
 **An offline, open-source quality checker for multiple-choice question (MCQ) datasets.**
 
-**Stable release:** [v0.3.0](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) — [Download the offline browser ZIP](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/download/v0.3.0/surgcore-mcq-browser-demo-v0.3.0.zip) or [Python wheel](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/download/v0.3.0/surgcore_mcq_validator-0.3.0-py3-none-any.whl). Artifacts are published only after CI passes.
+**Previous stable release:** [v0.3.0](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) — [Download the offline browser ZIP](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/download/v0.3.0/surgcore-mcq-browser-demo-v0.3.0.zip) or [Python wheel](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/download/v0.3.0/surgcore_mcq_validator-0.3.0-py3-none-any.whl). Artifacts are published only after CI passes.
 
 Before importing educational questions into a quiz application, check for missing or duplicated IDs, malformed choices, unsupported answer labels, absent explanations/references, and identical or *potentially* similar question stems. The CLI also emits machine-readable JSON for review workflows.
 
@@ -20,11 +20,15 @@ The validator was designed for the needs of medical education question banks, bu
 - Supports human-readable output and JSON reports for downstream review.
 - MIT licensed, with synthetic examples only.
 
+**Latest source version: v0.3.1.** Its [release will be available here](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.1) after GitHub CI verifies the patch and publishes the wheel and offline ZIP.
+
 ## Browser preview (no Python installation)
 
 **[Open the live browser demo](https://validator.surgcorepro.com/)** — the standalone Cloudflare Pages deployment is online and was independently loaded and exercised in a browser on 2026-10-29. Valid synthetic sample: 2 records, 0 errors. Intentionally invalid sample: 3 records, 2 errors, 1 warning. Files are processed inside the browser; selected MCQ files are not sent to an application server. Alternative [Pages](https://surgcore-mcq-demo.pages.dev/) and [workers.dev](https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev/) mirrors and a [downloadable offline ZIP](https://github.com/hossamkadasi/surgcore-mcq-validator/archive/refs/heads/main.zip) are also available.
 
 A local-only, dependency-free **browser demo** is included in [demo/index.html](demo/index.html). Download the repository ZIP, extract it and open that HTML file in a modern browser. Try the built-in synthetic samples, check CSV/JSON files with optional column mapping, and download a JSON report without uploading questions to a server. [Preview instructions and limitations](docs/BROWSER_DEMO.md).
+
+**Saved reports:** You may reselect a downloaded `surgcore-validation-report.json` in the browser. The page will display its **previous findings** (without rerunning MCQ checks); select the original MCQ file to run a new validation. The file picker has English and Arabic guidance.
 
 The preview does not run the Python CLI's heuristic near-duplicate scan and does not verify medical answers. The demo is hosted independently from SurgCore Pro production.
 

@@ -46,6 +46,7 @@
     mapping.value = "";
     selection.textContent = "Selected synthetic example: " + label;
     reset();
+    run.disabled = false;
     statusText("Sample loaded locally. Select “Run local checks” to see the results.");
   }
 
@@ -72,13 +73,26 @@
     }
     try {
       const text = await file.text();
-      selected = { name: file.name, text, format: ext };
+      // A previously downloaded JSON report is displayed, not revalidated.
+      const saved = ext === "json" ? engine.readSavedReport(text) : null;
+      if (saved) {
+        selected = { name: file.name, text, format: ext, kind: "saved-report", saved };
+        selection.textContent = file.name + " — saved validation report";
+        render(saved);
+        run.disabled = true;
+        $("result-context").textContent = "Previously saved report — these findings have NOT been rechecked.";
+        statusText("Saved report opened for viewing. It is not an MCQ question bank. To run new checks, select your original questions or a synthetic sample.", "ok");
+        return;
+      }
+      selected = { name: file.name, text, format: ext, kind: "questions" };
       selection.textContent = file.name + " (" + file.size.toLocaleString() + " bytes)";
-      statusText("File loaded into local browser memory. Select “Run local checks”.");
-    } catch (_) {
+      run.disabled = false;
+      statusText("Question file loaded locally. Select “Run local checks”.");
+    } catch (error) {
       selected = null;
+      run.disabled = true;
       selection.textContent = "File not loaded";
-      statusText("Could not read that local file.", "error");
+      statusText(error && typeof error.message === "string" ? error.message : "Could not read that local file.", "error");
     }
   }
 
@@ -94,7 +108,7 @@
       li.textContent = "No structural issues detected. Medical accuracy has NOT been reviewed.";
       issues.append(li);
     } else {
-      for (const issue of result.issues) {
+      for (const issue of result.issues.slice(0, 200)) {
         const li = document.createElement("li");
         const heading = document.createElement("strong");
         heading.className = issue.severity === "error" ? "danger" : "warning";
@@ -106,6 +120,11 @@
           " — " + issue.message;
         li.append(heading, detail);
         issues.append(li);
+      }
+      if (result.issues.length > 200) {
+        const more = document.createElement("li");
+        more.textContent = "Showing the first 200 findings of " + result.issues.length + ". Use the original downloaded report to review the rest.";
+        issues.append(more);
       }
     }
   }
@@ -133,12 +152,19 @@
       statusText("Choose a local file or load a synthetic example first.", "error");
       return;
     }
+    if (selected.kind === "saved-report") {
+      render(selected.saved);
+      $("result-context").textContent = "Previously saved report — these findings have NOT been rechecked.";
+      statusText("This is a saved report, not a question bank. Choose an MCQ file to run new checks.", "ok");
+      return;
+    }
     try {
       const config = engine.parseMapping(mapping.value);
       const parsed = engine.parseInput(selected.text, selected.format, config);
       const result = engine.validate(parsed);
       report = result;
       render(result);
+      $("result-context").textContent = "New structural validation results from your local question file.";
       download.disabled = false;
       if (result.summary.error_count) {
         statusText("Checks finished. " + result.summary.error_count + " structural error(s) found. Review before import.", "error");

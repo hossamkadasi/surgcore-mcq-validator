@@ -49,7 +49,7 @@ jobs:
         with:
           node-version: '22'
       - name: Validate browser-preview engine
-        run: node --test demo/tests/browser-validator.test.cjs
+        run: node --test demo/tests/*.test.cjs
 
   composite_action:
     name: Reusable GitHub Action smoke tests

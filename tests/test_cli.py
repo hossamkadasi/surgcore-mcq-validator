@@ -140,6 +140,20 @@ class CliTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(list(Path(folder).glob(".surgcore-report-*.tmp")), [])
 
+    def test_saved_report_rejected_with_actionable_message(self):
+        with tempfile.TemporaryDirectory() as folder:
+            file = Path(folder) / "surgcore-validation-report 2.json"
+            file.write_text(json.dumps({
+                "schema_version": "1.0",
+                "summary": {"record_count": 3, "schema_valid_record_count": 2,
+                            "error_count": 2, "warning_count": 1},
+                "issues": [{"severity": "error", "code": "invalid_answer", "record_index": 3}]
+            }), encoding="utf-8")
+            code, _, err = self.run_cli(["validate", str(file)])
+            self.assertEqual(code, 2)
+            self.assertIn("saved validation report", err)
+            self.assertIn("original question", err)
+
     def test_missing_file(self):
         code, _, err = self.run_cli(["validate", "/missing/example.csv"])
         self.assertEqual(code, 2)
