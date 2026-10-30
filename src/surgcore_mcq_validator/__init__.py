@@ -1,6 +1,6 @@
 """Offline, open-source structural quality validation for educational MCQs."""
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 from .loader import InputError, load_questions, read_mapping
 from .models import Issue, Question, ValidationReport
