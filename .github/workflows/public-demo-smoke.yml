@@ -1,0 +1,47 @@
+name: Public demo reachability
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/public-demo-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Verify Cloudflare demo HTTP responses
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      BASE_URL: https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev
+    steps:
+      - name: Fetch homepage and static assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in / /index.html /validator.js /app.js /styles.css; do
+            echo "Checking ${BASE_URL}${path}"
+            curl --fail --silent --show-error --location --connect-timeout 8 --max-time 22 --retry 2 --retry-delay 2 \
+              --dump-header /tmp/headers --output /tmp/body "${BASE_URL}${path}"
+            test -s /tmp/body
+            grep -qi 'content-security-policy:' /tmp/headers
+            case "$path" in
+              /|/index.html)
+                grep -q "SurgCore MCQ Validator" /tmp/body
+                grep -q './validator.js' /tmp/body ;;
+              /validator.js) grep -q 'SurgCoreValidator' /tmp/body ;;
+              /app.js) grep -q 'Run local checks' /tmp/body ;;
+              /styles.css) grep -q '\.panel' /tmp/body ;;
+            esac
+          done
+      - name: Reject modifications and missing routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl --silent --output /dev/null --write-out "%{http_code}" --max-time 15 --request POST "${BASE_URL}/")
+          test "$code" = "405"
+          code=$(curl --silent --output /dev/null --write-out "%{http_code}" --max-time 15 "${BASE_URL}/not-a-valid-path")
+          test "$code" = "404"
