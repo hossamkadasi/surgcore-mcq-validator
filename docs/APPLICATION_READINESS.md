@@ -8,7 +8,7 @@ This is a **truthful preparation record**, not a submitted application or an Ope
 - GitHub maintainer: `hossamkadasi` (repository owner and writer).
 - Official GitHub Release: [v0.3.0](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) — published 2026-10-30, with a browser ZIP and installable Python wheel. GitHub API verified that both assets were uploaded and the release tag points to commit `d099c694a02498c6736876e4c1d0c191b0c8b5fb`.
 - 61 Python tests on each of Python 3.10 and 3.13, 20 JavaScript tests, 2 composite-action fixtures, and the release publication job all passed in [GitHub Actions run #41110543998](https://github.com/hossamkadasi/surgcore-mcq-validator/actions/runs/41110543998).
-- Public demo: https://surgcore-mcq-demo.pages.dev/ — validated as accessible with successful synthetic interaction tests on 2026-10-29. This is technical QA, **not** external adoption evidence.
+- Public demo: https://validator.surgcorepro.com/ — validated as accessible with successful synthetic interaction tests on 2026-10-29. This is technical QA, **not** external adoption evidence.
 - Synthetic CLI examples, [a five-minute external tester guide](PILOT_TESTING.md), public contribution instructions and a feedback request: https://github.com/hossamkadasi/surgcore-mcq-validator/issues/1
 - Software tests **only structural MCQ quality**; it does not independently establish medical answer correctness.
 
@@ -24,7 +24,7 @@ This is a **truthful preparation record**, not a submitted application or an Ope
 
 **Anything else we should know?**
 
-> The browser demo at https://surgcore-mcq-demo.pages.dev/ is public and was tested successfully. The project checks data structure, not clinical answer accuracy. Its maintainer also works on a separate surgical education app; no proprietary app source or questions are in this repository.
+> The browser demo at https://validator.surgcorepro.com/ is public and was tested successfully. The project checks data structure, not clinical answer accuracy. Its maintainer also works on a separate surgical education app; no proprietary app source or questions are in this repository.
 
 All text describes actual published functionality and verified tests, **not** external users or an awarded benefit. The form also asks for private personal details: first/last name, ChatGPT account email and OpenAI Organization ID. Enter those privately on the official form, not in GitHub.
 

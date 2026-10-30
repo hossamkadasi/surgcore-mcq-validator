@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      BASE_URL: https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev
+      BASE_URL: https://validator.surgcorepro.com
     steps:
       - name: Fetch homepage and static assets
         shell: bash
