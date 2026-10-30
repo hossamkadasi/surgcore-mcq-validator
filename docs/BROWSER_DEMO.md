@@ -29,7 +29,7 @@ node --test demo/tests/browser-validator.test.cjs
 
 ## Hosted demo
 
-**[Open the live browser demo](https://surgcore-mcq-demo.pages.dev/)**. A dedicated Cloudflare Pages project `surgcore-mcq-demo` is connected to this repository, with `main` as its production branch and `demo` as its static output directory. Cloudflare reported deployment success (deployment ID `f0d1c5c9-b5c0-4a6b-9678-be4c256ddbfd`) on 2026-10-29 UTC.
+**[Open the live browser demo](https://validator.surgcorepro.com/)**. A dedicated Cloudflare Pages project `surgcore-mcq-demo` is connected to this repository, with `main` as its production branch and `demo` as its static output directory. Cloudflare reported deployment success (deployment ID `f0d1c5c9-b5c0-4a6b-9678-be4c256ddbfd`) on 2026-10-29 UTC.
 
 An independent browser load returned HTTP 200, and interactive testing confirmed:
 

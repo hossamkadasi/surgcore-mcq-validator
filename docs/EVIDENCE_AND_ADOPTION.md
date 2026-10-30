@@ -41,6 +41,14 @@
 - Action smoke job validated **two synthetic CSV fixtures**: standard headers (2 records, no errors/warnings) and custom mapping (1 record, no errors/warnings).
 - The reusable Action is published and can be consumed by other repositories through its pinned SHA. **No independent downstream adoption is claimed.**
 
+## Dedicated custom hostname and external availability (2026-10-30)
+
+- The public preview was additionally mapped to [validator.surgcorepro.com](https://validator.surgcorepro.com/) on the existing dedicated `surgcore-mcq-validator-demo` Cloudflare Worker.
+- Cloudflare Worker Domain API returned `enabled=true`, `service=surgcore-mcq-validator-demo`, and an automatically generated proxied AAAA record for `validator.surgcorepro.com`. No pre-existing conflicting DNS record or Worker domain was found.
+- Cloudflare Browser Rendering successfully loaded the homepage and the three essential assets (`validator.js`, `app.js`, and `styles.css`) over HTTPS from the new hostname on 2026-10-30.
+- This is **not proof of availability on every network**. A separate GitHub Actions smoke workflow now checks the custom hostname from a GitHub runner; any local ISP/DNS issue must still be confirmed by an actual affected user.
+- The host is a separate subdomain; existing Cloudflare routes for `surgcorepro.com` production were left unchanged.
+
 ## Formal GitHub Release (2026-10-30)
 
 - [Official v0.3.0 release](https://github.com/hossamkadasi/surgcore-mcq-validator/releases/tag/v0.3.0) published 2026-10-30; public, non-draft, and non-prerelease.

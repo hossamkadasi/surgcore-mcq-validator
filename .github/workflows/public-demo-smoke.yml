@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/public-demo-smoke.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/public-demo-smoke.yml"
   workflow_dispatch:
 
 permissions:
@@ -16,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      BASE_URL: https://surgcore-mcq-validator-demo.hossamalkadasi.workers.dev
+      BASE_URL: https://validator.surgcorepro.com
     steps:
       - name: Fetch homepage and static assets
         shell: bash
