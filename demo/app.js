@@ -92,7 +92,7 @@
       selected = null;
       run.disabled = true;
       selection.textContent = "File not loaded";
-      statusText(error instanceof Error ? error.message : "Could not read that local file.", "error");
+      statusText(error && typeof error.message === "string" ? error.message : "Could not read that local file.", "error");
     }
   }
 
